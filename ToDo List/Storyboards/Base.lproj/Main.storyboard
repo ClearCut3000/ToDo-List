@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller-->
+        <!--To Do List-->
         <scene sceneID="gCK-Ps-ekm">
             <objects>
                 <tableViewController id="2Ko-5U-0dL" customClass="ToDoTableViewController" customModule="ToDo_List" customModuleProvider="target" sceneMemberID="viewController">
@@ -16,15 +16,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="PXL-co-fps">
-                                <rect key="frame" x="0.0" y="44.5" width="414" height="43.5"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ToDoCell" id="PXL-co-fps" customClass="ToDoCell" customModule="ToDo_List" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44.5" width="414" height="22.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PXL-co-fps" id="hgd-Mz-SXX">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mtT-9I-xuF">
+                                            <rect key="frame" x="20" y="11" width="374" height="0.5"/>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="mtT-9I-xuF" secondAttribute="trailing" id="9is-fo-IEB"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="mtT-9I-xuF" secondAttribute="bottom" id="CtN-Hh-e7D"/>
+                                        <constraint firstItem="mtT-9I-xuF" firstAttribute="top" secondItem="hgd-Mz-SXX" secondAttribute="topMargin" id="WYI-oV-7OX"/>
+                                        <constraint firstItem="mtT-9I-xuF" firstAttribute="leading" secondItem="hgd-Mz-SXX" secondAttribute="leadingMargin" id="lDc-zM-Hso"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="zPf-en-4JX" kind="show" id="weI-OZ-pcQ"/>
+                                    <outlet property="stackView" destination="mtT-9I-xuF" id="WMI-9W-Fcz"/>
+                                    <segue destination="zPf-en-4JX" kind="show" identifier="ToDoItemSegue" id="weI-OZ-pcQ"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -33,13 +45,13 @@
                             <outlet property="delegate" destination="2Ko-5U-0dL" id="v76-SV-tC6"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="NR9-Z3-Xux"/>
+                    <navigationItem key="navigationItem" title="To Do List" id="NR9-Z3-Xux"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kZ8-3q-s5M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="275" y="44"/>
+            <point key="canvasLocation" x="245" y="44"/>
         </scene>
-        <!--To Do Item Table View Controller-->
+        <!--To Do Item Details-->
         <scene sceneID="Ibw-oy-xOK">
             <objects>
                 <tableViewController id="zPf-en-4JX" customClass="ToDoItemTableViewController" customModule="ToDo_List" customModuleProvider="target" sceneMemberID="viewController">
@@ -62,9 +74,21 @@
                             <outlet property="delegate" destination="zPf-en-4JX" id="ScF-qt-UWr"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="iwz-Gb-QME"/>
+                    <navigationItem key="navigationItem" title="To Do Item Details" id="yNq-Og-cbG">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="uvf-sQ-q9f">
+                            <connections>
+                                <segue destination="j4Q-39-HVo" kind="unwind" unwindAction="unwind:" id="XKy-iS-s2f"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="UOh-dW-xZw">
+                            <connections>
+                                <segue destination="j4Q-39-HVo" kind="unwind" identifier="SaveSegue" unwindAction="unwind:" id="cqA-5G-gFr"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mb7-3M-O8r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="j4Q-39-HVo" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1045" y="44"/>
         </scene>
@@ -72,8 +96,8 @@
         <scene sceneID="WxS-Vv-TjV">
             <objects>
                 <navigationController id="z3r-gJ-hb8" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="U1V-1h-4KJ">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="U1V-1h-4KJ">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>

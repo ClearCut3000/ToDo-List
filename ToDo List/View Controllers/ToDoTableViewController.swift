@@ -77,13 +77,14 @@ class ToDoTableViewController: UITableViewController {
     guard segue.identifier == "ToDoItemSegue" else { return }
     guard let selectedIndex = tableView.indexPathForSelectedRow else{ return }
     let destination = segue.destination as! ToDoItemTableViewController
+    // Creating a new instance of the ToDo class
     destination.todo = todos[selectedIndex.row].copy() as! ToDo
   }
   @IBAction func unwind(_ segue: UIStoryboardSegue){
     guard segue.identifier == "SaveSegue" else { return }
     guard let selectedIndex = tableView.indexPathForSelectedRow else{ return }
     let source = segue.source as! ToDoItemTableViewController
-    // We safely replace the new todo value in the array, and the old one is destroyed, because there are no more references to it thanks to ARC.
+    // We safely replace the new todo value in the array, and the old one is destroyed, because there are no more references to it, thanks to ARC.
     todos[selectedIndex.row] = source.todo
     if let toDoCell = tableView.cellForRow(at: selectedIndex) as? ToDoCell {
       if let stackView = toDoCell.stackView {

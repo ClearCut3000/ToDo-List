@@ -1,12 +1,12 @@
 //
-//  SectionPickerController.swift
+//  SectionImagePickerController.swift
 //  ToDo List
 //
 //  Created by Николай Никитин on 09.12.2021.
 //
 
 import UIKit
-class SectionPickerController: UIImagePickerController {
+class SectionImagePickerController: UIImagePickerController {
   
   var section: Int!
   

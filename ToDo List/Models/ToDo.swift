@@ -6,7 +6,7 @@
 //
 
 import UIKit
-class ToDo {
+@objcMembers class ToDo: NSObject {
   //var childer
   // weak var parent
 
@@ -43,7 +43,7 @@ class ToDo {
     return Mirror(reflecting: self).children.map { $0.value }
   }
 
-  func copy() -> Any{
+  override func copy() -> Any{
     // Type Any is specified for matching NSObject
     let newTodo = ToDo(
       title: title,

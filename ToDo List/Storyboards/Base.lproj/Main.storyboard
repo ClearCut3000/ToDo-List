@@ -45,7 +45,13 @@
                             <outlet property="delegate" destination="2Ko-5U-0dL" id="v76-SV-tC6"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="To Do List" id="NR9-Z3-Xux"/>
+                    <navigationItem key="navigationItem" title="To Do List" id="NR9-Z3-Xux">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="add" id="hZZ-Oy-dvF">
+                            <connections>
+                                <segue destination="zPf-en-4JX" kind="show" identifier="AddNewToDoItemSegue" id="I6d-Sc-cgJ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kZ8-3q-s5M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -85,14 +91,14 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="DateCell" id="esp-XF-9iM" customClass="DateCell" customModule="ToDo_List" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="88.5" width="414" height="43"/>
+                                <rect key="frame" x="0.0" y="88.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="esp-XF-9iM" id="P4K-o6-oL4">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ivw-PC-cgf">
-                                            <rect key="frame" x="20" y="11" width="374" height="21"/>
+                                            <rect key="frame" x="20" y="11" width="374" height="21.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -110,7 +116,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="DatePickerCell" id="XDf-jp-Eoh" customClass="DatePickerCell" customModule="ToDo_List" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="131.5" width="414" height="238.5"/>
+                                <rect key="frame" x="0.0" y="132" width="414" height="238.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XDf-jp-Eoh" id="wQx-M6-wWF">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="238.5"/>
@@ -132,7 +138,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImageCell" id="gVf-mW-csV" customClass="ImageCell" customModule="ToDo_List" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="370" width="414" height="22.5"/>
+                                <rect key="frame" x="0.0" y="370.5" width="414" height="22.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gVf-mW-csV" id="UKo-an-6pG">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="22.5"/>
@@ -154,7 +160,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" id="5bS-g6-87b" customClass="SwitchCell" customModule="ToDo_List" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="392.5" width="414" height="43.5"/>
+                                <rect key="frame" x="0.0" y="393" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5bS-g6-87b" id="t1B-sm-swR">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
@@ -214,6 +220,9 @@
             <point key="canvasLocation" x="-478" y="44"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="I6d-Sc-cgJ"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

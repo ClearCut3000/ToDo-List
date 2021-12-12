@@ -11,6 +11,7 @@ class ToDoItemTableViewController: UITableViewController {
 
   //MARK: - Properties
   var todo = ToDo()
+  var isDatePickerShown = true
 
   // MARK: - UIViewController Methods
 
@@ -24,7 +25,7 @@ extension ToDoItemTableViewController/*: UITableViewDataSource*/{
       return cell.isHidden ? 0 : UITableView.automaticDimension
     } else {
       // If the cells outside the TableView are all set to automaticDimension, except for the case of DatePicker
-      return value is Date && indexPath.row == 1 ? 0 : UITableView.automaticDimension
+      return value is Date && indexPath.row == 1 && isDatePickerShown ? 0 : UITableView.automaticDimension
     }
   }
   override func numberOfSections(in tableView: UITableView) -> Int {
@@ -55,7 +56,9 @@ extension ToDoItemTableViewController/*: UITableViewDelegate */{
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let value = todo.values[indexPath.section]
     if value is Date{
-      //TODO: implemets hide/show datepicker
+//      guard let datePickerCell = tableView.dequeueReusableCell(withIdentifier: "DateCell") as? DateCell else { return }
+      isDatePickerShown.toggle()
+      UIView.transition(with: tableView, duration: 1.0, options: .transitionCrossDissolve, animations: {self.tableView.reloadData()}, completion: nil)
     } else if value is UIImage{
       let alert = UIAlertController(title: "Please, choose source.", message: nil, preferredStyle: .actionSheet)
       let cancel = UIAlertAction(title: "Cancel", style: .cancel)
@@ -103,6 +106,7 @@ extension ToDoItemTableViewController {
         cell.datePicker.date = dateValue
         cell.datePicker.section = indexPath.section
         cell.datePicker.minimumDate = Date()
+        cell.isHidden = isDatePickerShown
         return cell
       default:
         fatalError("Please, add more prototype cells for Date section")

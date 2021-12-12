@@ -74,26 +74,54 @@ class ToDoTableViewController: UITableViewController {
 
   //MARK: - Navigation
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    guard segue.identifier == "ToDoItemSegue" else { return }
-    guard let selectedIndex = tableView.indexPathForSelectedRow else{ return }
-    let destination = segue.destination as! ToDoItemTableViewController
-    // Creating a new instance of the ToDo class
-    destination.todo = todos[selectedIndex.row].copy() as! ToDo
+    if segue.identifier == "ToDoItemSegue"{
+      guard let selectedIndex = tableView.indexPathForSelectedRow else{ return }
+      let destination = segue.destination as! ToDoItemTableViewController
+      // Creating a new instance of the ToDo class
+      destination.todo = todos[selectedIndex.row].copy() as! ToDo
+    } else if segue.identifier == "AddNewToDoItemSegue" {
+      let destination = segue.destination as! ToDoItemTableViewController
+      destination.todo = ToDo()
+
+    }
   }
+
   @IBAction func unwind(_ segue: UIStoryboardSegue){
     guard segue.identifier == "SaveSegue" else { return }
-    guard let selectedIndex = tableView.indexPathForSelectedRow else{ return }
     let source = segue.source as! ToDoItemTableViewController
-    // We safely replace the new todo value in the array, and the old one is destroyed, because there are no more references to it, thanks to ARC.
-    todos[selectedIndex.row] = source.todo
-    if let toDoCell = tableView.cellForRow(at: selectedIndex) as? ToDoCell {
-      if let stackView = toDoCell.stackView {
-        stackView.arrangedSubviews.forEach{ subview in
-          stackView.removeArrangedSubview(subview)
-          subview.removeFromSuperview()
+    if let selectedIndex = tableView.indexPathForSelectedRow {
+      // We safely replace the new todo value in the array, and the old one is destroyed, because there are no more references to it, thanks to ARC.
+      todos[selectedIndex.row] = source.todo
+      if let toDoCell = tableView.cellForRow(at: selectedIndex) as? ToDoCell {
+        if let stackView = toDoCell.stackView {
+          stackView.arrangedSubviews.forEach{ subview in
+            stackView.removeArrangedSubview(subview)
+            subview.removeFromSuperview()
+          }
         }
       }
+      tableView.reloadRows(at: [selectedIndex], with: .automatic)
+    } else {
+      todos.append(source.todo)
+      tableView.reloadData()
     }
-    tableView.reloadRows(at: [selectedIndex], with: .automatic)
   }
 }
+
+  //MARK: - UITableViewDelegate
+  extension ToDoTableViewController/*: UITableViewDelegate */{
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+      switch editingStyle{
+      case .delete:
+        todos.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+      case .insert:
+        break
+      case .none:
+        break
+      @unknown default:
+        print("Some weird shit is about to happen!")
+        break
+      }
+    }
+  }

@@ -11,5 +11,4 @@ class ToDoCell: UITableViewCell {
 
   @IBOutlet var stackView: UIStackView!
   
-
 }

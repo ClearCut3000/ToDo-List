@@ -10,4 +10,5 @@ import UIKit
 class SwitchCell: UITableViewCell {
   
   @IBOutlet weak var switchSelector: SectionSwitch!
+  
 }

@@ -191,7 +191,7 @@
                                 <segue destination="j4Q-39-HVo" kind="unwind" unwindAction="unwind:" id="XKy-iS-s2f"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="UOh-dW-xZw">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="done" systemItem="save" id="UOh-dW-xZw">
                             <connections>
                                 <segue destination="j4Q-39-HVo" kind="unwind" identifier="SaveSegue" unwindAction="unwind:" id="cqA-5G-gFr"/>
                             </connections>

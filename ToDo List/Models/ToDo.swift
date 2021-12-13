@@ -20,7 +20,7 @@ import UIKit
     isComplete: Bool = false,
     dueDate: Date = Date(),
     notes: String? = nil,
-    image: UIImage? = nil
+    image: UIImage? = UIImage(named: "default")
   ) {
     self.title = title
     self.isComplete = isComplete
@@ -53,5 +53,4 @@ import UIKit
       image: image?.copy() as? UIImage )
     return newTodo
   }
-
 }

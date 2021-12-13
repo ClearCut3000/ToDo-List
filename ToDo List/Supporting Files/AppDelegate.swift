@@ -9,11 +9,10 @@ import UIKit
 import UserNotifications
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    UNUserNotificationCenter.current().delegate = self
     UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .alert, .sound]) { (sucsess, error) in
       DispatchQueue.main.async {
         UIApplication.shared.registerForRemoteNotifications()
@@ -21,6 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     return true
   }
+
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent: UNNotification, withCompletionHandler: @escaping (UNNotificationPresentationOptions)->()) { withCompletionHandler([.banner , .sound, .badge]) }
+
+  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive: UNNotificationResponse, withCompletionHandler: @escaping ()->()) { withCompletionHandler() }
+
 
   // MARK: UISceneSession Lifecycle
 

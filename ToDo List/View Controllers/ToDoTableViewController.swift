@@ -18,7 +18,7 @@ class ToDoTableViewController: UITableViewController {
     super.viewDidLoad()
     todos = [
       ToDo(title: "Купить хлеб", isComplete: false, image: UIImage(named: "bread")),
-      ToDo(title: "Записать ребенка в школу", isComplete: false, image: UIImage(named: "school")),
+      ToDo(title: "Встретиться с патером", isComplete: false, image: UIImage(named: "school")),
       ToDo(title: "Поймать волну", isComplete: false, image: UIImage(named: "wave")),
     ]
     navigationItem.leftBarButtonItem = editButtonItem
@@ -29,13 +29,13 @@ class ToDoTableViewController: UITableViewController {
       let content = UNMutableNotificationContent()
       content.title = todo.title
       content.sound = .default
-      content.body = todo.notes ?? "No note!"
+      content.body = todo.notes ?? "No notes!"
       let targetDate = todo.dueDate
       let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: targetDate), repeats: false)
       let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
       UNUserNotificationCenter.current().add(request, withCompletionHandler: {error in
         if error != nil {
-          print (#line, #function, "Some weird shit happened with notifications in \(#file)!")
+          print (#line, #function, "Some very strange things have happened to notifications in \(#file)!")
         } else {
           print (targetDate)
           print (request)
@@ -71,7 +71,7 @@ class ToDoTableViewController: UITableViewController {
     case .none:
       break
     @unknown default:
-      print(#line, #function, "Some weird shit happened in \(#file)!")
+      print(#line, #function, "Some very strange things happened in \(#file)!")
       break
     }
   }

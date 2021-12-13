@@ -122,7 +122,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="238.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="HmF-hF-s5e" customClass="SectionDatePicker" customModule="ToDo_List" customModuleProvider="target">
+                                        <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="HmF-hF-s5e" customClass="SectionDatePicker" customModule="ToDo_List" customModuleProvider="target">
                                             <rect key="frame" x="20" y="11" width="374" height="216.5"/>
                                         </datePicker>
                                     </subviews>

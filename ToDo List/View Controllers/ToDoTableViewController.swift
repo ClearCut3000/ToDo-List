@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class ToDoTableViewController: UITableViewController {
 
@@ -21,6 +22,25 @@ class ToDoTableViewController: UITableViewController {
       ToDo(title: "Поймать волну", isComplete: false, image: UIImage(named: "wave")),
     ]
     navigationItem.leftBarButtonItem = editButtonItem
+  }
+
+  //MARK: - Methods
+  func observeNotification(_ todo: ToDo){
+      let content = UNMutableNotificationContent()
+      content.title = todo.title
+      content.sound = .default
+      content.body = todo.notes ?? "No note!"
+      let targetDate = todo.dueDate
+      let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: targetDate), repeats: false)
+      let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+      UNUserNotificationCenter.current().add(request, withCompletionHandler: {error in
+        if error != nil {
+          print (#line, #function, "Some weird shit happened with notifications in \(#file)!")
+        } else {
+          print (targetDate)
+          print (request)
+        }
+      })
   }
 
   //MARK: - UITableViewDataSource
@@ -59,7 +79,10 @@ class ToDoTableViewController: UITableViewController {
   //MARK: - Cell Content
   func configure(_ cell: ToDoCell, with todo: ToDo){
     guard let stackView = cell.stackView else { return }
-    if stackView.arrangedSubviews.count == 0 {
+    stackView.arrangedSubviews.forEach{ subview in
+      stackView.removeArrangedSubview(subview)
+      subview.removeFromSuperview()
+    }
       for index in 0 ..< todo.keys.count {
         let key = todo.capitalizedKeys[index]
         let value = todo.values[index]
@@ -91,13 +114,7 @@ class ToDoTableViewController: UITableViewController {
           stackView.addArrangedSubview(imageView)
         }
       }
-    } else {
-      stackView.arrangedSubviews.forEach{ subview in
-        stackView.removeArrangedSubview(subview)
-        subview.removeFromSuperview()
-      }
     }
-  }
 
   //MARK: - Navigation
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -115,31 +132,14 @@ class ToDoTableViewController: UITableViewController {
   @IBAction func unwind(_ segue: UIStoryboardSegue){
     guard segue.identifier == "SaveSegue" else { return }
     let source = segue.source as! ToDoItemTableViewController
+    observeNotification(source.todo)
     if let selectedIndex = tableView.indexPathForSelectedRow {
       // We safely replace the new todo value in the array, and the old one is destroyed, because there are no more references to it, thanks to ARC.
       todos[selectedIndex.row] = source.todo
-            if let toDoCell = tableView.cellForRow(at: selectedIndex) as? ToDoCell {
-              if let stackView = toDoCell.stackView {
-                stackView.arrangedSubviews.forEach{ subview in
-                  stackView.removeArrangedSubview(subview)
-                  subview.removeFromSuperview()
-                }
-              }
-            }
       tableView.reloadRows(at: [selectedIndex], with: .automatic)
     } else {
-      let indexPath = IndexPath(row: todos.count, section: 0)
       todos.append(source.todo)
-      tableView.insertRows(at: [indexPath], with: .automatic)
-      if let toDoCell = tableView.cellForRow(at: indexPath) as? ToDoCell{
-        if let stackView = toDoCell.stackView {
-          stackView.arrangedSubviews.forEach { subview in
-            stackView.removeArrangedSubview(subview)
-            subview.removeFromSuperview()
-          }
-        }
-      }
-      tableView.reloadRows(at: [indexPath], with: .automatic)
+      tableView.reloadData()
     }
   }
 }

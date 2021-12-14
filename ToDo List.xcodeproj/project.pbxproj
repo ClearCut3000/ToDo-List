@@ -404,8 +404,10 @@
 				DEVELOPMENT_TEAM = CJ7JF497NG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ToDo List/Supporting Files/Info.plist";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please, allow camera to change photo!";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please, allow photolibrary to change photo!";
+				INFOPLIST_KEY_NSRemindersUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -434,8 +436,10 @@
 				DEVELOPMENT_TEAM = CJ7JF497NG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "ToDo List/Supporting Files/Info.plist";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please, allow camera to change photo!";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please, allow photolibrary to change photo!";
+				INFOPLIST_KEY_NSRemindersUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

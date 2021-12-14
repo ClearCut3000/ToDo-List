@@ -14,7 +14,9 @@ class ToDoItemTableViewController: UITableViewController {
   var DatePickerIsShown = true
 
   // MARK: - UIViewController Methods
-
+  override func viewDidLoad() {
+    super.viewDidLoad()
+  }
 }
 
 // MARK: - UITableViewDataSource
@@ -57,7 +59,7 @@ extension ToDoItemTableViewController/*: UITableViewDelegate */{
     let value = todo.values[indexPath.section]
     if value is Date{
       DatePickerIsShown.toggle()
-      UIView.transition(with: tableView, duration: 1.0, options: .transitionCrossDissolve, animations: {self.tableView.reloadData()}, completion: nil)
+      UIView.transition(with: tableView, duration: 1.0, options: .transitionCrossDissolve, animations: { self.tableView.reloadData() }, completion: nil)
     } else if value is UIImage{
       let alert = UIAlertController(title: "Please, choose source.", message: nil, preferredStyle: .actionSheet)
       let cancel = UIAlertAction(title: "Cancel", style: .cancel)
@@ -151,12 +153,12 @@ extension ToDoItemTableViewController {
     let key = todo.keys[sender.section!]
     let text = sender.text ?? ""
     todo.setValue(text, forKey: key)
-    if key == "title" {
-      navigationItem.rightBarButtonItem?.isEnabled = text.trimmingCharacters(in: .whitespaces).isEmpty ? false : true
-    }
+    guard key == "title"  else { return }
+    navigationItem.rightBarButtonItem?.isEnabled = text.trimmingCharacters(in: .whitespaces).isEmpty ? false : true
   }
 }
 
+//MARK: - UIImagePickerControllerDelegate
 extension ToDoItemTableViewController: UIImagePickerControllerDelegate {
 
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -171,4 +173,5 @@ extension ToDoItemTableViewController: UIImagePickerControllerDelegate {
   }
 }
 
+//MARK: - UINavigationControllerDelegate
 extension ToDoItemTableViewController: UINavigationControllerDelegate {}

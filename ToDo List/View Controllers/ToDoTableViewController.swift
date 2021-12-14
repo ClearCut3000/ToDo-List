@@ -7,19 +7,21 @@
 
 import UIKit
 import UserNotifications
+import EventKit
 
 class ToDoTableViewController: UITableViewController {
 
   //MARK: - Properties
   var todos = [ToDo]()
+  let eventStore: EKEventStore = EKEventStore()
 
   //MARK: - UIViewController
   override func viewDidLoad(){
     super.viewDidLoad()
     todos = [
       ToDo(title: "Купить хлеб", isComplete: false, image: UIImage(named: "bread")),
-      ToDo(title: "Встретиться с патером", isComplete: false, image: UIImage(named: "school")),
-      ToDo(title: "Поймать волну", isComplete: false, image: UIImage(named: "wave")),
+      ToDo(title: "Записаться на курсы", isComplete: false, image: UIImage(named: "school")),
+      ToDo(title: "Научиться плавать", isComplete: false, image: UIImage(named: "wave")),
     ]
     navigationItem.leftBarButtonItem = editButtonItem
   }
@@ -42,6 +44,35 @@ class ToDoTableViewController: UITableViewController {
         }
       })
   }
+
+  func addEvent(_ eventSorce: ToDo ){
+    eventStore.requestAccess(to: .event) { [weak self] success, error in
+      if success, error == nil {
+        DispatchQueue.main.async {
+          guard let store = self?.eventStore else { return }
+          let newEvent = EKEvent(eventStore: store)
+          newEvent.title = eventSorce.title
+          newEvent.startDate = .now
+          newEvent.endDate = eventSorce.dueDate
+          newEvent.notes = eventSorce.notes ?? "No notes!"
+          newEvent.calendar = self?.eventStore.defaultCalendarForNewEvents
+          do {
+            try self?.eventStore.save(newEvent, span: .thisEvent)
+          } catch let error as NSError {
+            print("failed to save event with error : \(error)")
+          }
+          print("Saved Event")
+        }
+      } else {
+        print ("Error")
+      }
+    }
+  }
+
+
+
+
+
 
   //MARK: - UITableViewDataSource
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -133,6 +164,7 @@ class ToDoTableViewController: UITableViewController {
     guard segue.identifier == "SaveSegue" else { return }
     let source = segue.source as! ToDoItemTableViewController
     observeNotification(source.todo)
+    addEvent(source.todo)
     if let selectedIndex = tableView.indexPathForSelectedRow {
       // We safely replace the new todo value in the array, and the old one is destroyed, because there are no more references to it, thanks to ARC.
       todos[selectedIndex.row] = source.todo

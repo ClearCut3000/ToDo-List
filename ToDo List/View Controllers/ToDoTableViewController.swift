@@ -14,6 +14,8 @@ class ToDoTableViewController: UITableViewController {
   //MARK: - Properties
   var todos = [ToDo]()
   let eventStore: EKEventStore = EKEventStore()
+  var createdEvents = [ToDo: EKEvent]()
+  var createdNotofications = [ToDo: UNNotificationRequest]()
 
   //MARK: - UIViewController
   override func viewDidLoad(){
@@ -27,7 +29,7 @@ class ToDoTableViewController: UITableViewController {
   }
 
   //MARK: - Methods
-  func observeNotification(_ todo: ToDo){
+  private func addNotification(for todo: ToDo){
       let content = UNMutableNotificationContent()
       content.title = todo.title
       content.sound = .default
@@ -41,38 +43,52 @@ class ToDoTableViewController: UITableViewController {
         } else {
           print (targetDate)
           print (request)
+          self.createdNotofications.updateValue(request, forKey: todo)
         }
       })
   }
 
-  func addEvent(_ eventSorce: ToDo ){
+  private func deleteNotification( for todo: ToDo){
+    guard let notoficationForDeleteing = createdNotofications.removeValue(forKey: todo) else {
+      print("Couldn't find notification request")
+      return }
+    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [notoficationForDeleteing.identifier])
+    print ("Notification with the request \(notoficationForDeleteing) has been successfully destroyed!")
+  }
+
+  private func addEvent(for eventSorce: ToDo ){
     eventStore.requestAccess(to: .event) { [weak self] success, error in
       if success, error == nil {
         DispatchQueue.main.async {
           guard let store = self?.eventStore else { return }
-          let newEvent = EKEvent(eventStore: store)
-          newEvent.title = eventSorce.title
-          newEvent.startDate = .now
-          newEvent.endDate = eventSorce.dueDate
-          newEvent.notes = eventSorce.notes ?? "No notes!"
-          newEvent.calendar = self?.eventStore.defaultCalendarForNewEvents
-          do {
-            try self?.eventStore.save(newEvent, span: .thisEvent)
-          } catch let error as NSError {
-            print("failed to save event with error : \(error)")
+          let event = EKEvent(eventStore: store)
+          event.title = eventSorce.title
+          event.startDate = .now
+          event.endDate = eventSorce.dueDate
+          event.notes = eventSorce.notes ?? "No notes!"
+          event.calendar = store.defaultCalendarForNewEvents
+            do {
+              try store.save(event, span: .thisEvent)
+              self?.createdEvents.updateValue(event, forKey: eventSorce)
+            } catch let error as NSError {
+              print("Failed to save event with error : \(error)")
+            }
+            print("Event Saved")
           }
-          print("Saved Event")
-        }
       } else {
-        print ("Error")
+        print ("An error occurred in the access request \(String(describing: error))")
+      }
       }
     }
+
+  private func deleteEvent(for eventSource: ToDo) {
+    guard let deletingEvent = createdEvents.removeValue(forKey: eventSource) else { return }
+    do{
+      try eventStore.remove(deletingEvent, span: EKSpan.thisEvent)
+    } catch let error {
+      print ("Fail to delete event with errror: \(error)")
+    }
   }
-
-
-
-
-
 
   //MARK: - UITableViewDataSource
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -95,7 +111,8 @@ class ToDoTableViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     switch editingStyle{
     case .delete:
-      todos.remove(at: indexPath.row)
+      let todo = todos.remove(at: indexPath.row)
+      deleteEvent(for: todo)
       tableView.deleteRows(at: [indexPath], with: .fade)
     case .insert:
       break
@@ -152,8 +169,10 @@ class ToDoTableViewController: UITableViewController {
     if segue.identifier == "ToDoItemSegue"{
       guard let selectedIndex = tableView.indexPathForSelectedRow else{ return }
       let destination = segue.destination as! ToDoItemTableViewController
+
       // Creating a new instance of the ToDo class
       destination.todo = todos[selectedIndex.row].copy() as! ToDo
+      destination.navigationItem.rightBarButtonItem?.isEnabled = true
     } else if segue.identifier == "AddNewToDoItemSegue" {
       let destination = segue.destination as! ToDoItemTableViewController
       destination.todo = ToDo()
@@ -163,9 +182,11 @@ class ToDoTableViewController: UITableViewController {
   @IBAction func unwind(_ segue: UIStoryboardSegue){
     guard segue.identifier == "SaveSegue" else { return }
     let source = segue.source as! ToDoItemTableViewController
-    observeNotification(source.todo)
-    addEvent(source.todo)
+    addEvent(for: source.todo)
+    addNotification(for: source.todo)
     if let selectedIndex = tableView.indexPathForSelectedRow {
+      deleteEvent(for: todos[selectedIndex.row])
+      deleteNotification(for: todos[selectedIndex.row])
       // We safely replace the new todo value in the array, and the old one is destroyed, because there are no more references to it, thanks to ARC.
       todos[selectedIndex.row] = source.todo
       tableView.reloadRows(at: [selectedIndex], with: .automatic)

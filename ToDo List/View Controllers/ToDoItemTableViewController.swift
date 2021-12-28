@@ -8,11 +8,11 @@
 import UIKit
 
 class ToDoItemTableViewController: UITableViewController {
-
+  
   //MARK: - Properties
   var todo = ToDo()
-  var DatePickerIsShown = true
-
+  var datePickerIsShown = true
+  
   // MARK: - UIViewController Methods
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -27,26 +27,26 @@ extension ToDoItemTableViewController/*: UITableViewDataSource*/{
       return cell.isHidden ? 0 : UITableView.automaticDimension
     } else {
       // If the cells outside the TableView are all set to automaticDimension, except for the case of DatePicker
-      return value is Date && indexPath.row == 1 && DatePickerIsShown ? 0 : UITableView.automaticDimension
+      return value is Date && indexPath.row == 1 && datePickerIsShown ? 0 : UITableView.automaticDimension
     }
   }
   override func numberOfSections(in tableView: UITableView) -> Int {
     // The number of properties is equal to the number of sections
     return todo.keys.count
   }
-
+  
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     let value = todo.values[section]
     return value is Date ? 2 : 1
   }
-
+  
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let section = indexPath.section
     let value = todo.values[section]
     let cell = getCellFor(indexPath: indexPath, with: value)
     return cell
   }
-
+  
   override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
     let key = todo.capitalizedKeys[section]
     return key
@@ -58,7 +58,7 @@ extension ToDoItemTableViewController/*: UITableViewDelegate */{
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let value = todo.values[indexPath.section]
     if value is Date{
-      DatePickerIsShown.toggle()
+      datePickerIsShown.toggle()
       UIView.transition(with: tableView, duration: 1.0, options: .transitionCrossDissolve, animations: { self.tableView.reloadData() }, completion: nil)
     } else if value is UIImage{
       let alert = UIAlertController(title: "Please, choose source.", message: nil, preferredStyle: .actionSheet)
@@ -107,7 +107,7 @@ extension ToDoItemTableViewController {
         cell.datePicker.date = dateValue
         cell.datePicker.section = indexPath.section
         cell.datePicker.minimumDate = Date()
-        cell.isHidden = DatePickerIsShown
+        cell.isHidden = datePickerIsShown
         return cell
       default:
         fatalError("Please, add more prototype cells for Date section")
@@ -142,14 +142,14 @@ extension ToDoItemTableViewController {
     let labelIndexPath = IndexPath(row: 0, section: section)
     tableView.reloadRows(at: [labelIndexPath], with: .automatic)
   }
-
-  @objc func switchValueChanged(_ sender: SectionSwitch){
+  
+  @objc func switchValueChanged(_ sender: SectionSwitch) {
     let key = todo.keys[sender.section!]
     let value = sender.isOn
     todo.setValue(value, forKey: key)
   }
-
-  @objc func textFieldValueChanged(_ sender: SectionTextField){
+  
+  @objc func textFieldValueChanged(_ sender: SectionTextField) {
     let key = todo.keys[sender.section!]
     let text = sender.text ?? ""
     todo.setValue(text, forKey: key)
@@ -160,7 +160,7 @@ extension ToDoItemTableViewController {
 
 //MARK: - UIImagePickerControllerDelegate
 extension ToDoItemTableViewController: UIImagePickerControllerDelegate {
-
+  
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
     dismiss(animated: true)
     guard let image = info[.originalImage] as? UIImage else { return }

@@ -8,11 +8,11 @@
 import UIKit
 
 class DateCell: UITableViewCell {
-
+  
   @IBOutlet weak var dateLabel: UILabel!
-
+  
   func setDate(_ date: Date) {
     dateLabel.text = date.formattedDate
   }
-
+  
 }

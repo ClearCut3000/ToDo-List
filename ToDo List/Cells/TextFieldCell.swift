@@ -10,5 +10,5 @@ import UIKit
 class TextFieldCell: UITableViewCell {
   
   @IBOutlet var textField: SectionTextField!
-
+  
 }

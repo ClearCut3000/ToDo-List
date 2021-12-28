@@ -8,7 +8,7 @@
 import UIKit
 
 class DatePickerCell: UITableViewCell {
-
+  
   @IBOutlet weak var datePicker: SectionDatePicker!
-
+  
 }

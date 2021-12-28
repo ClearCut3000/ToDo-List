@@ -34,16 +34,16 @@ import UIKit
   }
 
   // Allows you to get a list of the names of the properties of an instance of a class
-  var keys: [String]{
+  var keys: [String] {
     return Mirror(reflecting: self).children.compactMap { $0.label }
   }
 
   // Allows you to get a list of property values of an instance of a class
-  var values: [Any?]{
+  var values: [Any?] {
     return Mirror(reflecting: self).children.map { $0.value }
   }
 
-  override func copy() -> Any{
+  override func copy() -> Any {
     // Type Any is specified for matching NSObject
     let newTodo = ToDo(
       title: title,
